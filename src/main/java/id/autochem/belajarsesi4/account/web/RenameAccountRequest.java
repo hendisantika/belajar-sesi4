@@ -1,5 +1,6 @@
 package id.autochem.belajarsesi4.account.web;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -13,5 +14,5 @@ import jakarta.validation.constraints.Size;
  * Date: 26/11/26
  * Time: 13.00
  */
-public record RenameAccountRequest(@NotBlank @Size(max = 150) String name) {
+public record RenameAccountRequest(@Schema(example = "Kas Besar") @NotBlank @Size(max = 150) String name) {
 }

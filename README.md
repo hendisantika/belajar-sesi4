@@ -20,6 +20,16 @@ docker compose up -d
 
 Koneksi DB dapat diubah lewat env `DB_URL`, `DB_USERNAME`, dan `DB_PASSWORD`.
 
+## Swagger UI
+
+Setelah aplikasi berjalan:
+
+- Swagger UI: http://localhost:8080/swagger-ui.html
+- Spesifikasi OpenAPI (JSON): http://localhost:8080/v3/api-docs
+
+Endpoint `POST /journals` menyediakan tiga contoh request yang bisa dipilih di Swagger UI: **Valid** (201),
+**Unbalanced** (422), dan **Rollback** (404, tanpa data parsial).
+
 ## Migrasi Flyway
 
 | Versi | Isi                                                                   |
