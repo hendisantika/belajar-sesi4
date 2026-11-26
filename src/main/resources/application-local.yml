@@ -1,0 +1,18 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        generate_statistics: true     # hitung jumlah query per session
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG                # cetak SQL
+    org.hibernate.orm.jdbc.bind: TRACE      # cetak nilai parameter
+    org.hibernate.stat: DEBUG               # ringkasan statistik per session
+
+# Contoh log:
+# select je1_0.id, je1_0.date, l1_0.id, l1_0.debit ...
+#   from journal_entry je1_0
+#   join journal_line l1_0 on je1_0.id = l1_0.entry_id
+#  where je1_0.date between ? and ?
