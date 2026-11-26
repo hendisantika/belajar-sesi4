@@ -20,6 +20,14 @@ docker compose up -d
 
 Koneksi DB dapat diubah lewat env `DB_URL`, `DB_USERNAME`, dan `DB_PASSWORD`.
 
+Jika port 5432 atau 8080 sudah terpakai (misalnya ada PostgreSQL native atau SSH tunnel), jalankan di port lain:
+
+```bash
+POSTGRES_PORT=55432 docker compose up -d
+DB_URL=jdbc:postgresql://localhost:55432/belajar_sesi4 SERVER_PORT=18081 \
+  ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+```
+
 ## Swagger UI
 
 Setelah aplikasi berjalan:
