@@ -70,7 +70,8 @@ public class AccountService {
     }
 
     private Account findById(Long id) {
-        return repo.findById(id).orElseThrow(() -> NotFoundException.of("Akun", id));
+        // Parent ikut di-load: AccountResponse.from() membaca parent.code tanpa query tambahan
+        return repo.findWithParentById(id).orElseThrow(() -> NotFoundException.of("Akun", id));
     }
 
     private Account findByCode(String code) {

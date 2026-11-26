@@ -19,6 +19,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Created by IntelliJ IDEA.
@@ -53,10 +56,13 @@ public class JournalService {
             throw new BusinessRuleException("Nomor jurnal sudah dipakai: " + req.number());
         }
         JournalEntry entry = JournalEntry.draft(req.number(), req.date());
+        Map<String, Account> accountsByCode = loadAccounts(req.lines());
 
         for (LineRequest l : req.lines()) {
-            Account acc = accounts.findByCode(l.accountCode())
-                    .orElseThrow(() -> NotFoundException.account(l.accountCode()));
+            Account acc = accountsByCode.get(l.accountCode());
+            if (acc == null) {
+                throw NotFoundException.account(l.accountCode());
+            }
             if (!acc.isActive()) {
                 throw new BusinessRuleException("Akun nonaktif: " + acc.getCode());
             }
@@ -94,6 +100,15 @@ public class JournalService {
             throw new BusinessRuleException("Tanggal 'from' tidak boleh setelah 'to'");
         }
         return journals.findWithLines(from, to).stream().map(mapper::toResponse).toList();
+    }
+
+    /**
+     * Semua akun di jurnal diambil dengan 1 query (WHERE code IN ...), bukan 1 query per baris.
+     */
+    private Map<String, Account> loadAccounts(List<LineRequest> lines) {
+        List<String> codes = lines.stream().map(LineRequest::accountCode).distinct().toList();
+        return accounts.findByCodeIn(codes).stream()
+                .collect(Collectors.toMap(Account::getCode, Function.identity()));
     }
 
     private static BigDecimal normalize(BigDecimal amount) {

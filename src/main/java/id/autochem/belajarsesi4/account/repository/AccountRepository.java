@@ -1,8 +1,10 @@
 package id.autochem.belajarsesi4.account.repository;
 
 import id.autochem.belajarsesi4.account.model.Account;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,5 +24,17 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     boolean existsByCode(String code);
 
+    /**
+     * Satu query untuk banyak kode akun (menghindari findByCode per baris jurnal).
+     */
+    List<Account> findByCodeIn(Collection<String> codes);
+
+    /**
+     * Parent ikut di-load (left join) agar mapping ke DTO tidak memicu lazy fetch per akun.
+     */
+    @EntityGraph(attributePaths = "parent")
     List<Account> findAllByOrderByCodeAsc();
+
+    @EntityGraph(attributePaths = "parent")
+    Optional<Account> findWithParentById(Long id);
 }

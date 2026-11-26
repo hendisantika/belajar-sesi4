@@ -119,6 +119,7 @@ Semua nominal memakai `BigDecimal` dengan kolom `NUMERIC(19,2)`.
 | `JournalApiIT`                | Kontrak HTTP 201 / 400 / 404 / 422 dan tabel tetap kosong setelah gagal            |
 | `JournalRepositoryIT`         | `findAll()` + `getLines()` = 1 + N query, sedangkan fetch join / `@EntityGraph` = **1 query** (diukur via Hibernate Statistics) |
 | `AccountPersistenceContextIT` | Dirty checking tanpa `save()`, cache tingkat 1, `LazyInitializationException` pada entity detached |
+| `NPlusOneGuardIT`             | Penjaga N+1: jumlah SELECT saat membuat jurnal tetap sama berapa pun barisnya (`findByCodeIn`), daftar/detail akun dan jurnal tanpa lazy fetch (`entityFetchCount = 0`) |
 | `AccountBalanceLockingIT`     | `@Version` menolak data basi (`ObjectOptimisticLockingFailureException`); `PESSIMISTIC_WRITE` menjaga 10 update bersamaan tanpa lost update |
 
 ## Demo N+1 di log SQL
